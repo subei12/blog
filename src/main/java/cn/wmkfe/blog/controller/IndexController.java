@@ -32,8 +32,8 @@ public class IndexController {
     @RequestMapping(value = {"/index.html","/"})
     public String indexPage(@RequestParam(value = "p",required = false)String p,@RequestParam(value = "pjax",required = false)Boolean pjax,Model model){
         MacroCommonHead mCH=new MacroCommonHead();
-        mCH.setTitle("测试标题");
-        mCH.setDescription("测试描述");
+        mCH.setTitle("blog - 安然");
+        mCH.setDescription("一个基于spring boot搭建的blog!");
         mCH.setUrl("http://localhost:8080/");
         mCH.setPreconnect("http://localhost:8080/");
         Statistics statistics=new Statistics();
@@ -43,6 +43,8 @@ public class IndexController {
         statistics.setViewCount(statisticsService.getCount());
         //更新浏览次数
         statisticsService.updateCount();
+
+        //当前页
         Integer currentPage=1;
         if(p !=null && !"".equals(p)){
             currentPage=Integer.valueOf(p);
@@ -55,9 +57,9 @@ public class IndexController {
         pageSupport.setCurrentPageNo(currentPage);
         pageSupport.setTotal(count);
 
-        if(currentPage<0){
+        if(currentPage<0){//当前页小于0为1首页
             currentPage=1;
-        }else if (currentPage>pageSupport.getPageCount()){
+        }else if (currentPage>pageSupport.getPageCount()){//当前页大于总页数为总页数即最后一页
             currentPage=pageSupport.getPageCount();
         }
         pageSupport.setCurrentPageNo(currentPage);
@@ -96,7 +98,7 @@ public class IndexController {
         statistics.setArticleCount(articleService.countArticle(null));
         //访问数量
         statistics.setViewCount(statisticsService.getCount());
-        //更新浏览次数
+        //更新浏览次数，这个sql有问题，卧槽我懵逼了，这个不会是全站的访问次数+1吧，哭了哭了
         statisticsService.updateCount();
         Article article = articleService.getArticle(id);
         //标签
@@ -120,8 +122,8 @@ public class IndexController {
     @RequestMapping(value = {"/links.html"})
     public String page1(Model model){
         MacroCommonHead mCH=new MacroCommonHead();
-        mCH.setTitle("测试标题");
-        mCH.setDescription("测试描述");
+        mCH.setTitle("blog - 友情链接");
+        mCH.setDescription("小伙伴们！");
         mCH.setUrl("http://localhost:8080/");
         mCH.setPreconnect("http://localhost:8080/");
 
@@ -132,7 +134,7 @@ public class IndexController {
         statistics.setArticleCount(articleService.countArticle(null));
         //访问数量
         statistics.setViewCount(statisticsService.getCount());
-        //更新浏览次数
+        //更新浏览次数，是这的问题，sql多了个as a
         statisticsService.updateCount();
         //友情链接
         List<Link> allLink = linkService.getAllLink();
@@ -195,6 +197,8 @@ public class IndexController {
         List<Type> typeList = typeService.getTypeList(1, ConstantValue.TYPESIZE, null);
         //存档
         List<Archives> dateList = ArchivesDate.dateList();
+
+        //文章也就算了，侧边栏也要重新查一边吗，，，俺也不分割页面了，回头用redis试试
         model.addAttribute("mCH",mCH);
         model.addAttribute("articleList",articleList);
         model.addAttribute("tagList",tagList);

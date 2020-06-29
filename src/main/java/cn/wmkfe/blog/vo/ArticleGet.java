@@ -1,5 +1,8 @@
 package cn.wmkfe.blog.vo;
 
+/**
+ * 这是个啥，先放一放
+ */
 public class ArticleGet {
     private String title;
     private Integer typeId;

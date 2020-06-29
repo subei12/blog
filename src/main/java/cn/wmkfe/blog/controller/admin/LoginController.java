@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping(value = "/perfectStudent")
+@RequestMapping(value = "/blog") //原本是perfectStudent,太难记就改了，至于为什么不改成admin是因为和下面的requestMapping结合之后会被当初是templates的内容，会404的
 public class LoginController {
 
     @Autowired

@@ -18,7 +18,6 @@ public class FileUploadConfig {
     public static void setPath(String path) {
         FileUploadConfig.path = path;
     }
-
     public static String getProfile() {
         return profile;
     }
