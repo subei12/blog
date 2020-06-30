@@ -99,7 +99,7 @@ layui.use(['form','layer','layedit','laydate','upload'],function(){
          *  百度了一下then(不会前端的东西),.then前面执行完，将结果给then里的函数然后执行函数
          *  干脆直接声明成函数，手动调用，并且将需要的参数传过去。
          */
-        submit(result);
+        submit(vditor.getHTML());
         function submit(result) {
             console.log(result)
             // 实际使用时的提交信息

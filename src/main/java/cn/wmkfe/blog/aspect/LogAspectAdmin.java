@@ -7,7 +7,10 @@ import cn.wmkfe.blog.service.SysLogService;
 import cn.wmkfe.blog.util.IpAdrressUtil;
 import cn.wmkfe.blog.util.JacksonUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.qiniu.util.Json;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -105,8 +108,29 @@ public class LogAspectAdmin {
             /** 这里会报错https://blog.csdn.net/pange1991/article/details/79175448
              * params = JSON.toJSONString(args),加上SerializerFeature.IgnoreErrorGetter即可，有版本要求，1.2.44
              * 已解决
+             * 还不如不解决，原本的代码只会在上传图片时报错，但是又try，参数为空继续向下执行，
+             * 改了之后哦参数不为空了，太打了，30w，玩尼玛
              */
             params = JSON.toJSONString(args, SerializerFeature.IgnoreErrorGetter);
+            if(params.length()>=10000){//数据库能放2w，我觉得没有必要，1w意思一下算了，反正是图片都会走这里
+
+                JSONObject jsonObject = JSON.parseObject(JSON.toJSONString(args[0], SerializerFeature.IgnoreErrorGetter));
+
+                String contentType = jsonObject.getString("contentType");
+                String size = jsonObject.getString("size");
+                String str="{\n" +
+                        "\t\"contentType\": \""+contentType+"\",\n" +
+                        "\t\"size\": "+size+",\n" +
+                        "\t\"uplodeDate\": \""+new Date()+"\"\n" +
+                        "}";
+
+                params=str;
+
+            }
+
+
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
