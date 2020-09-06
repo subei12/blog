@@ -10,11 +10,12 @@ import cn.wmkfe.blog.model.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.DateUtils;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -65,22 +66,51 @@ public class IndexController {
         pageSupport.setCurrentPageNo(currentPage);
         List<Article> articleList = articleService.getArticleList(currentPage, ConstantValue.ARTICLEPAGESIZE, null);
 
-        //标签
-        List<Tag> tagList = tagService.getTagList(1, ConstantValue.TAGSPAGESIZE, null);
-        //分类
-        List<Type> typeList = typeService.getTypeList(1, ConstantValue.TYPESIZE, null);
-        //存档
-        List<Archives> dateList = ArchivesDate.dateList();
+        //侧边栏内容
+        content(model);
         model.addAttribute("articleList",articleList);
         model.addAttribute("pageSupport",pageSupport);
-        model.addAttribute("tagList",tagList);
-        model.addAttribute("typeList",typeList);
-        model.addAttribute("dateList",dateList);
         model.addAttribute("mCH",mCH);
         model.addAttribute("statistics",statistics);
         return pjax==null?  "index":"common-template/pjax-page";
     }
 
+    @RequestMapping("aList")
+    @ResponseBody
+    public List<Article> list(){
+        return articleService.archives();
+    }
+
+    /**
+     * 2020.9.6 安然
+     * 公共的侧边栏内容读取，通过引用传递
+     * @param model
+     */
+    public void content(Model model){
+        //标签
+        List<Tag> tagList = tagService.getTagList(1, ConstantValue.TAGSPAGESIZE, null);
+        //分类
+        List<Type> typeList = typeService.getTypeList(1, ConstantValue.TYPESIZE, null);
+        //存档
+        //List<Archives> dateList = ArchivesDate.dateList();
+        List<Article> archives = articleService.archives();
+        List<Archives> dateList=new ArrayList<>();
+        int size=archives.size();
+        if(archives.size()>=6){
+            size=6;
+        }
+        for (int i=0;i<size;i++){
+            Archives a =new Archives();//归档用的类
+            String CNFormat = new SimpleDateFormat("yyyy 年 MM 月").format(archives.get(i).getCreateTime());
+            String slashFormat = new SimpleDateFormat("yyyy 年 MM 月").format(archives.get(i).getCreateTime());
+            a.setCNFormat(CNFormat);
+            a.setSlashFormat(slashFormat);
+            dateList.add(a);
+        }
+        model.addAttribute("tagList",tagList);
+        model.addAttribute("typeList",typeList);
+        model.addAttribute("dateList",dateList);
+    }
 
     //文章详情
     @RequestMapping(value = {"/articles/{id}.html"})
@@ -101,19 +131,12 @@ public class IndexController {
         //更新浏览次数，这个sql有问题，卧槽我懵逼了，这个不会是全站的访问次数+1吧，哭了哭了
         statisticsService.updateCount();
         Article article = articleService.getArticle(id);
-        //标签
-        List<Tag> tagList = tagService.getTagList(1, ConstantValue.TAGSPAGESIZE, null);
-        //分类
-        List<Type> typeList = typeService.getTypeList(1, ConstantValue.TYPESIZE, null);
-        //存档
-        List<Archives> dateList = ArchivesDate.dateList();
+        //侧边栏内容
+        content(model);
         //更新浏览次数
         articleService.updateArticleViewCount(id);
 
         model.addAttribute("article",article);
-        model.addAttribute("tagList",tagList);
-        model.addAttribute("typeList",typeList);
-        model.addAttribute("dateList",dateList);
         model.addAttribute("mCH",mCH);
         model.addAttribute("statistics",statistics);
         return "articles";
@@ -138,17 +161,10 @@ public class IndexController {
         statisticsService.updateCount();
         //友情链接
         List<Link> allLink = linkService.getAllLink();
-        //标签
-        List<Tag> tagList = tagService.getTagList(1, ConstantValue.TAGSPAGESIZE, null);
-        //分类
-        List<Type> typeList = typeService.getTypeList(1, ConstantValue.TYPESIZE, null);
-        //存档
-        List<Archives> dateList = ArchivesDate.dateList();
+        //侧边栏内容
+        content(model);
         model.addAttribute("mCH",mCH);
         model.addAttribute("allLink",allLink);
-        model.addAttribute("tagList",tagList);
-        model.addAttribute("typeList",typeList);
-        model.addAttribute("dateList",dateList);
         model.addAttribute("statistics",statistics);
         return "links";
     }
@@ -191,19 +207,12 @@ public class IndexController {
         pageSupport.setCurrentPageNo(currentPage);
         //文章
         List<Article> articleList = articleService.getArticleList(currentPage, ConstantValue.ARTICLEPAGESIZE, articleGet);
-        //标签
-        List<Tag> tagList = tagService.getTagList(1, ConstantValue.TAGSPAGESIZE, null);
-        //分类
-        List<Type> typeList = typeService.getTypeList(1, ConstantValue.TYPESIZE, null);
-        //存档
-        List<Archives> dateList = ArchivesDate.dateList();
+        //侧边栏内容
+        content(model);
 
         //文章也就算了，侧边栏也要重新查一边吗，，，俺也不分割页面了，回头用redis试试
         model.addAttribute("mCH",mCH);
         model.addAttribute("articleList",articleList);
-        model.addAttribute("tagList",tagList);
-        model.addAttribute("typeList",typeList);
-        model.addAttribute("dateList",dateList);
         model.addAttribute("pageSupport",pageSupport);
         model.addAttribute("statistics",statistics);
         return "archives";
@@ -226,16 +235,9 @@ public class IndexController {
         statistics.setViewCount(statisticsService.getCount());
         //更新浏览次数
         statisticsService.updateCount();
-        //标签
-        List<Tag> tagList = tagService.getTagList(1, ConstantValue.TAGSPAGESIZE, null);
-        //分类
-        List<Type> typeList = typeService.getTypeList(1, ConstantValue.TYPESIZE, null);
-        //存档
-        List<Archives> dateList = ArchivesDate.dateList();
+        //侧边栏内容
+        content(model);
         model.addAttribute("mCH",mCH);
-        model.addAttribute("tagList",tagList);
-        model.addAttribute("typeList",typeList);
-        model.addAttribute("dateList",dateList);
         model.addAttribute("statistics",statistics);
         return "tags";
     }
@@ -243,8 +245,8 @@ public class IndexController {
     @RequestMapping(value = {"/about.html"})
     public String aboutPage(Model model){
         MacroCommonHead mCH=new MacroCommonHead();
-        mCH.setTitle("测试标题");
-        mCH.setDescription("测试描述");
+        mCH.setTitle("About - 关于");
+        mCH.setDescription("“路漫漫其修远兮，吾将上下而求索”");
         mCH.setUrl("http://localhost:8080/");
         mCH.setPreconnect("http://localhost:8080/");
 
@@ -258,17 +260,10 @@ public class IndexController {
         statisticsService.updateCount();
         //关于我的文章
         Article article = articleService.aboutArticle();
-        //标签
-        List<Tag> tagList = tagService.getTagList(1, ConstantValue.TAGSPAGESIZE, null);
-        //分类
-        List<Type> typeList = typeService.getTypeList(1, ConstantValue.TYPESIZE, null);
-        //存档
-        List<Archives> dateList = ArchivesDate.dateList();
+        //侧边栏内容
+        content(model);
         model.addAttribute("mCH",mCH);
         model.addAttribute("article",article);
-        model.addAttribute("tagList",tagList);
-        model.addAttribute("typeList",typeList);
-        model.addAttribute("dateList",dateList);
         model.addAttribute("statistics",statistics);
         return "about";
     }
@@ -312,17 +307,10 @@ public class IndexController {
         pageSupport.setCurrentPageNo(currentPage);
         //查询文章
         List<Article> articleList = articleService.getArticleList(currentPage, ConstantValue.ARTICLEPAGESIZE, articleGet);
-        //标签
-        List<Tag> tagList = tagService.getTagList(1, ConstantValue.TAGSPAGESIZE, null);
-        //分类
-        List<Type> typeList = typeService.getTypeList(1, ConstantValue.TYPESIZE, null);
-        //存档
-        List<Archives> dateList = ArchivesDate.dateList();
+        //侧边栏内容
+        content(model);
         model.addAttribute("articleList",articleList);
         model.addAttribute("pageSupport",pageSupport);
-        model.addAttribute("tagList",tagList);
-        model.addAttribute("typeList",typeList);
-        model.addAttribute("dateList",dateList);
         model.addAttribute("mCH",mCH);
         model.addAttribute("statistics",statistics);
         return pjax==null? "index": "common-template/pjax-page";
@@ -366,17 +354,10 @@ public class IndexController {
         pageSupport.setCurrentPageNo(currentPage);
         //查询文章
         List<Article> articleList = articleService.getArticleList(currentPage, ConstantValue.ARTICLEPAGESIZE, articleGet);
-        //标签
-        List<Tag> tagList = tagService.getTagList(1, ConstantValue.TAGSPAGESIZE, null);
-        //分类
-        List<Type> typeList = typeService.getTypeList(1, ConstantValue.TYPESIZE, null);
-        //存档
-        List<Archives> dateList = ArchivesDate.dateList();
+        //侧边栏内容
+        content(model);
         model.addAttribute("articleList",articleList);
         model.addAttribute("pageSupport",pageSupport);
-        model.addAttribute("tagList",tagList);
-        model.addAttribute("typeList",typeList);
-        model.addAttribute("dateList",dateList);
         model.addAttribute("mCH",mCH);
         model.addAttribute("statistics",statistics);
         return pjax==null?  "index":"common-template/pjax-page";

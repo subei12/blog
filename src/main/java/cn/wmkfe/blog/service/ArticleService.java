@@ -25,4 +25,7 @@ public interface ArticleService {
 
     Article aboutArticle();
 
+    //归档
+    List<Article> archives();
+
 }

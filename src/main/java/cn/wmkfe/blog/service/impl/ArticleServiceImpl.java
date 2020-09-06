@@ -93,4 +93,9 @@ public class ArticleServiceImpl implements ArticleService {
     public Article aboutArticle() {
         return articleMapper.about();
     }
+
+    @Override
+    public List<Article> archives() {
+        return articleMapper.archives();
+    }
 }

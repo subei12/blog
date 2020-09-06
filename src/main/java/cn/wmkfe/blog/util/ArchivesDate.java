@@ -7,6 +7,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 2020.9.5
+ * 修复每次归档显示最近六个月但是会出现某月无内容仍显示，点击404错误
+ * 可能是没想到怎么还有我这种一个月没更新的人，23333
+ */
 public class ArchivesDate {
     public static List<Archives> dateList(){
         List<Archives> list=new ArrayList<>();

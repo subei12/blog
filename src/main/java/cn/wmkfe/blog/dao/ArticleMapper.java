@@ -34,4 +34,7 @@ public interface ArticleMapper {
     int updatePutTop(@Param("id")String id, @Param("putTop")boolean putTop);
 
     Article about();
+
+    //归档
+    List<Article> archives();
 }
