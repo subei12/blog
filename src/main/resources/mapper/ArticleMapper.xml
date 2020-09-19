@@ -191,7 +191,9 @@
             就加了下面这一句排序，时最新发的帖子排在上面
             不得不说，这老哥的sql真长啊，一个接口可实现多个功能，牛
            */
-          order by   a.create_time  desc
+          order by
+          put_top DESC,/* 置顶 */
+          a.create_time  desc
 
 
   </select>

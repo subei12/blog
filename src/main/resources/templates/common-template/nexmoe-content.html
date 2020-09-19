@@ -9,7 +9,7 @@
                             <img  th:src="${article.firstPicture}" th:alt="${article.title}"
                                  th:attr="data-src=${article.firstPicture}"
                                  class="ls-is-cached lazyloaded index-img" referrerpolicy="no-referrer">
-                            <h1 th:text="${article.title}"></h1>
+                            <h1 th:text="${article.putTop?'[📌]'+article.title:article.title}"></h1>
                         </div>
                     </a>
                     <div class="nexmoe-post-meta">
