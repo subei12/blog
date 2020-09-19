@@ -299,6 +299,14 @@
         WHERE a.title='关于我'
     </select>
 
+    <!-- 归档 -->
+    <resultMap id="archivesMap" type="cn.wmkfe.blog.model.Article">
+        <result column="CREATE" property="createTime"/>
+    </resultMap>
+    <select id="archives" resultMap="archivesMap" >
+        SELECT DISTINCT c.`CREATE`  from (select   DATE_FORMAT(a.create_time, '%Y%m') `CREATE`  from t_article a ORDER BY a.create_time DESC) c
+    </select>
+    
     <resultMap id="aboutMap" type="cn.wmkfe.blog.model.Article">
         <id column="id"  property="id" />
         <result column="title" property="title"/>

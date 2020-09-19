@@ -166,24 +166,38 @@ layui.use(['form','layer','table','laytpl','util'],function(){
                         body.find("#id").val(obj.data.id);
                         body.find(".title").val(obj.data.title);
                         body.find(".introduction ").val(obj.data.introduction );
-                        // body.find("#vditor").text(obj.data.contentMd);
+                        //编辑重启文章内容
+                        body.find("#vditor").text(obj.data.contentMd);
                         body.find("#firstPicture").attr('src',obj.data.firstPicture);
                         body.find(".status option").each(function(){
-                            if($(this).val()==obj.data.status ? 1 : 0){
+                            //if($(this).val()==obj.data.status ? 1 : 0){
+                            if(obj.data.status){
+                                console.log(obj.data.status);
                                 $(this).attr("selected",true);
+                                $(this).parent().next().children().eq(0).children().eq(0).val("已发布")
+                                console.log($(this).parent().next().children().eq(0).children().eq(0).html());
                                 return;
                             }
                         });
                         obj.data.putTop ? body.find("input:checkbox[name='putTop']").attr("checked",true) : '';
+                        if(obj.data.putTop){
+                            body.find("input:checkbox[name='putTop']").next().addClass("layui-form-onswitch");
+                            body.find("input:checkbox[name='putTop']").next().children().eq(0).html("是");
+
+                        }
                         body.find("input:radio[name='commentable']").each(function(){
                             if($(this).val()==obj.data.commentable ? 1 : 0){
                                 $(this).attr("checked",true);
+                                $(this).next().addClass("layui-form-radioed");
+                                $(this).next().children().eq(0).html("");//这不是普通的空格，它是一个符号；对，就是那个input单选框的默认样式
                                 return;
                             }
                         });
                         body.find("input:radio[name='type']").each(function(){
                             if($(this).val()==obj.data.typeId){
                                 $(this).attr("checked",true);
+                                $(this).next().addClass("layui-form-radioed");
+                                $(this).next().children().eq(0).html("");//这不是普通的空格，它是一个符号；对，就是那个input单选框的默认样式
                                 return;
                             }
                         });
@@ -191,6 +205,8 @@ layui.use(['form','layer','table','laytpl','util'],function(){
                             for(var i=0;i<obj.data.tagList.length;i++){
                                 if($(this).val()==obj.data.tagList[i]['id']){
                                     $(this).attr("checked",true);
+                                    //下一个兄弟元素(div)来显示是否选中
+                                    $(this).next().addClass("layui-form-checked");
                                 }
                             }
                         });

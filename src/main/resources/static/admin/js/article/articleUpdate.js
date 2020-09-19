@@ -66,7 +66,10 @@ layui.use(['form','layer','layedit','laydate','upload'],function(){
         var commentableVal=$("input:radio[name='commentable']:checked").val();
 
         // 实际使用时的提交信息
-        vditor.getHTML().then(function (result) {
+        //修复同src/main/resources/static/admin/js/article/articleAdd.js
+        //vditor.getHTML().then(function (result) {
+        submit(vditor.getHTML());
+        function submit(result) {
             // 实际使用时的提交信息
             $.post("/admin/articles",{
                 _method :'PUT',
@@ -103,7 +106,7 @@ layui.use(['form','layer','layedit','laydate','upload'],function(){
 
             })
 
-        })
+        }
 
         return false;
     })
