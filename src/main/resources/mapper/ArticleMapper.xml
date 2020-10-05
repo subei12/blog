@@ -6,12 +6,12 @@
      (id,title, introduction, content,content_md,
      first_picture, put_top, status,
      commentable, view_count, create_time,
-     update_time, type_id, user_id)
+     update_time, type_id, user_id, separate_page)
      values
      (#{id},#{title},#{introduction},#{content},#{contentMd},
      #{firstPicture},#{putTop},#{status},
      #{commentable},#{viewCount},#{createTime},
-     #{updateTime},#{typeId},#{userId})
+     #{updateTime},#{typeId},#{userId},0)
   </insert>
 
   <delete id="remove" >
@@ -339,4 +339,41 @@
             <result property="tagName" column="tag_name"/>
         </collection>
     </resultMap>
+
+
+
+    <!-- 以下是新接口内容 -->
+
+    <resultMap id="ListMap" type="cn.wmkfe.blog.model.Article">
+        <id column="id"  property="id" />
+        <result column="title" property="title"/>
+        <result column="introduction" property="introduction"/>
+        <result column="first_picture" property="firstPicture"/>
+        <result column="put_top" property="putTop"/>
+        <result column="status" property="status"/>
+        <result column="commentable" property="commentable"/>
+        <result column="view_count" property="viewCount"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="type_id" property="typeId"/>
+        <result column="user_id" property="userId"/>
+        <result column="separate_page" property="separatePage"/>
+        <!--一对一  分类 -->
+        <association property="type" javaType="cn.wmkfe.blog.model.Type">
+            <id column="tyid" property="id"/>
+            <result column="type_name" property="typeName"/>
+        </association>
+        <!-- 一对多  标签-->
+        <collection property="tagList" ofType="cn.wmkfe.blog.model.Tag">
+            <id property="id" column="taid"/>
+            <result property="tagName" column="tag_name"/>
+        </collection>
+    </resultMap>
+    <!-- 分页查询所有文章 -->
+    <!-- 懒得写列，有空再说-->
+  <select id="listArchives" resultMap="ListMap">
+      SELECT * from t_article t WHERE  t.separate_page=0
+      order by t.create_time  desc
+  </select>
+
 </mapper>

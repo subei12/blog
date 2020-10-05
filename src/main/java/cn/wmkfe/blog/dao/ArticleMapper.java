@@ -37,4 +37,9 @@ public interface ArticleMapper {
 
     //归档
     List<Article> archives();
+
+    //以下是新接口内容
+
+
+    List<Article> listArchives();
 }

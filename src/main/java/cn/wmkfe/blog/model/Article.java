@@ -1,5 +1,6 @@
 package cn.wmkfe.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
@@ -23,7 +24,7 @@ public class Article {
     private Boolean commentable;           //开启评论
 
     private Integer viewCount;             //访问量
-
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createTime;                //创建时间
 
     private Date updateTime;                //更新时间
@@ -45,6 +46,17 @@ public class Article {
     private List<Tag> tagList;              //多标签
 
     private List<Comment> commentList;     //评论
+
+    //是否为独立页面，0否，1是，例如“关于”为独立页面
+    private int separatePage;
+
+    public void setSeparatePage(int separatePage) {
+        this.separatePage = separatePage;
+    }
+
+    public int getSeparatePage() {
+        return separatePage;
+    }
 
     public List<Tag> getTagList() {
         return tagList;
@@ -196,5 +208,31 @@ public class Article {
 
     public void setContentMd(String contentMd) {
         this.contentMd = contentMd;
+    }
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", introduction='" + introduction + '\'' +
+                ", firstPicture='" + firstPicture + '\'' +
+                ", putTop=" + putTop +
+                ", status=" + status +
+                ", commentable=" + commentable +
+                ", viewCount=" + viewCount +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", typeId=" + typeId +
+                ", userId=" + userId +
+                ", content='" + content + '\'' +
+                ", contentMd='" + contentMd + '\'' +
+                ", type=" + type +
+                ", user=" + user +
+                ", tagMapList=" + tagMapList +
+                ", tagList=" + tagList +
+                ", commentList=" + commentList +
+                ", separatePage=" + separatePage +
+                '}';
     }
 }

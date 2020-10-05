@@ -30,7 +30,7 @@ public class IndexController {
     private LinkService linkService;
     @Autowired
     private StatisticsService statisticsService;
-    @RequestMapping(value = {"/index.html","/"})
+    @RequestMapping(value = {"/index.old"})//更换新的首页
     public String indexPage(@RequestParam(value = "p",required = false)String p,@RequestParam(value = "pjax",required = false)Boolean pjax,Model model){
         MacroCommonHead mCH=new MacroCommonHead();
         mCH.setTitle("blog - 安然");
