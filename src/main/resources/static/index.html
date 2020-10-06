@@ -116,8 +116,10 @@
 <div class="pagination-container">
     
     
-        <a class="next-page" href="index11.html">下一页</a>
-    
+        <a class="prev-page" >上一页</a>
+        <a class="next-page" >下一页</a>
+        <a class="total-page" style="display: none;">总页数(隐藏)</a>
+        <a class="num-page" style="display: none;">当前页(隐藏)</a>
 </div>
 
 
@@ -155,13 +157,43 @@
       })();
     });
 
-    $.ajax({
+    //首页
+    page(1);
+    //上一页
+    $(".prev-page").click(function () {
+        var pageNum=$(".num-page").html();
+        page((pageNum-1));
+    });
+    //下一页
+    $(".next-page").click(function () {
+      var pageNum=$(".num-page").html();
+      page((Number(pageNum)+1));
+    });
+
+    function page(pageIndex) {
+      $.ajax({
         url : '/init',
         type : 'post',
         async: false,//使用同步的方式,true为异步方式
+        data: "pageIndex="+pageIndex,
         success : function(data){
-            $.each(data,function (i,article) {
-                $(".post-container").append("<article class=\"post\">\n" +
+          //每次执行之前清楚之前的内容。
+          $(".post-container").empty();
+          var result=data.list;
+          $(".total-page").html(data.total);
+          $(".num-page").html(data.pageNum);
+          if(data.hasNextPage){//如果没有下一页隐藏下一页
+            $(".next-page").show();
+          }else{
+            $(".next-page").hide();
+          }
+          if(data.hasPreviousPage){//如果没有上一页隐藏上一页
+              $(".prev-page").show();
+          }else{
+            $(".prev-page").hide();
+          }
+          $.each(result,function (i,article) {
+            $(".post-container").append("<article class=\"post\">\n" +
                     "        <a href=\"post.html?id="+article.id+"\">\n" +
                     "            <h2 class=\"post-title\">"+article.title+"</h2>\n" +
                     "        </a>\n" +
@@ -172,9 +204,10 @@
                     "            \n" +
                     "        </div>\n" +
                     "    </article>")
-            });
+          });
         }
-    });
+      });
+    }
 
   </script>
 </body>

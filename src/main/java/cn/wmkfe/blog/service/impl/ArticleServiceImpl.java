@@ -1,19 +1,18 @@
 package cn.wmkfe.blog.service.impl;
 
 import cn.wmkfe.blog.NotFoundException;
-import cn.wmkfe.blog.annotation.Operation;
 import cn.wmkfe.blog.dao.ArticleMapper;
 import cn.wmkfe.blog.dao.CommentMapper;
 import cn.wmkfe.blog.dao.TagMapMapper;
 import cn.wmkfe.blog.model.Article;
 import cn.wmkfe.blog.service.ArticleService;
 import cn.wmkfe.blog.vo.ArticleGet;
-import org.apache.ibatis.annotations.Param;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Array;
 import java.util.List;
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -97,5 +96,13 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<Article> archives() {
         return articleMapper.archives();
+    }
+
+    @Override
+    public PageInfo<Article> listArchives(int pageIndex, int pageSize) {
+        PageHelper.startPage(pageIndex,pageSize);
+        List<Article> articles = articleMapper.listArchives();
+        PageInfo<Article> pageInfo=new PageInfo<Article>(articles);
+        return pageInfo;
     }
 }

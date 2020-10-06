@@ -2,6 +2,7 @@ package cn.wmkfe.blog.service;
 
 import cn.wmkfe.blog.model.Article;
 import cn.wmkfe.blog.vo.ArticleGet;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -27,5 +28,8 @@ public interface ArticleService {
 
     //归档
     List<Article> archives();
+
+    //分页查询所有文章
+    PageInfo<Article> listArchives(int pageIndex, int pageSize);
 
 }
