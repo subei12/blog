@@ -8,11 +8,11 @@
 
 **密码：123456**
 
-**新版前台地址：** http://localhost:8080/
+**新版前台地址：** http://localhost:8085/
 ![index.png](https://s1.ax1x.com/2020/10/05/0tdRqP.png)
 ![post1.png](https://s1.ax1x.com/2020/10/05/0td2rt.png)
 ![post2.png](https://s1.ax1x.com/2020/10/05/0tdgKI.png)
-**旧版前台地址：**https://blog.imalan.cn/
+**旧版前台地址：** http://localhost:8085/index.old
 ![index_old.png](https://s1.ax1x.com/2020/10/05/0twDe0.png)
 ![post1_old.png](https://s1.ax1x.com/2020/10/05/0twrwV.png)
 ![post2_old.png](https://s1.ax1x.com/2020/10/05/0tw0Lq.png)
