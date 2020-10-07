@@ -129,4 +129,16 @@ public class ArticleAPIController {
         return map;
     }
 
+    //逻辑删除文章,就不restful了
+    @Operation("逻辑删除 | 更新文章")
+    @DeleteMapping("/articles/logic/{ids}")
+    public Map<String,Object> deleteLogicArticles(@PathVariable(value = "ids")String[] ids){
+        Map<String,Object> map=new HashMap<>();
+        articleService.deleteLogicArticles(ids);
+        map.put("code",200);
+        map.put("msg",ConstantValue.SUCCESS);
+        map.put("data",null);
+        return map;
+    }
+
 }

@@ -42,4 +42,7 @@ public interface ArticleMapper {
 
 
     List<Article> listArchives();
+
+    //逻辑删除文章
+    int deleteLogicArticles(String[] ids);
 }

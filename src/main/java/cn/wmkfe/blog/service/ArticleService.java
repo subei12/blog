@@ -32,4 +32,7 @@ public interface ArticleService {
     //分页查询所有文章
     PageInfo<Article> listArchives(int pageIndex, int pageSize);
 
+    //逻辑删除文章，慢慢的都不适配老版本的前端使用接口了，有空重写sql应该就行了
+    int deleteLogicArticles(String[] ids);
+
 }

@@ -187,6 +187,7 @@
           ON a.id = t_m.article_id
           LEFT JOIN t_tag AS ta
           ON ta.id = t_m.tag_id
+              where a.separate_page=0
           /**
             就加了下面这一句排序，时最新发的帖子排在上面
             不得不说，这老哥的sql真长啊，一个接口可实现多个功能，牛
@@ -236,6 +237,7 @@
           ON a.id = t_m.article_id
       <where>
             a.`title` NOT IN(SELECT title FROM t_article AS t_a WHERE t_a.`title`='关于我')
+            and a.separate_page=0
           <if test="articleGet!=null and articleGet.title!=null and articleGet.title!=''">
               and a.title like #{pattern_title}
           </if>
@@ -375,5 +377,13 @@
       SELECT * from t_article t WHERE  t.separate_page=0
       order by t.create_time  desc
   </select>
+
+
+  <update id="deleteLogicArticles">
+      update t_article set separate_page=2 where id in
+      <foreach collection="array" open="(" close=")" separator="," item="item">
+          #{item}
+      </foreach>
+  </update>
 
 </mapper>

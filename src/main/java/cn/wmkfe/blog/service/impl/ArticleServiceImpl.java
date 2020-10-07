@@ -105,4 +105,9 @@ public class ArticleServiceImpl implements ArticleService {
         PageInfo<Article> pageInfo=new PageInfo<Article>(articles);
         return pageInfo;
     }
+
+    @Override
+    public int deleteLogicArticles(String[] ids) {
+        return articleMapper.deleteLogicArticles(ids);
+    }
 }

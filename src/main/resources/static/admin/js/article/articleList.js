@@ -132,7 +132,7 @@ layui.use(['form','layer','table','laytpl','util'],function(){
                 articleId.push(data[i].id);
             }
             layer.confirm('确定删除选中的文章？', {icon: 3, title: '提示信息'}, function (index) {
-                $.post("/admin/articles/"+articleId,{
+                $.post("/admin/articles/logic/"+articleId,{
                     _method : 'DELETE'  //将需要删除的articleId作为参数传入
                 },function(data){
                     if(data.code==200){
@@ -245,7 +245,7 @@ layui.use(['form','layer','table','laytpl','util'],function(){
             editArticle(data);
         } else if(layEvent === 'del'){ //删除
             layer.confirm('确定删除此文章？',{icon:3, title:'提示信息'},function(index){
-                $.post("/admin/articles/"+data.id,{
+                $.post("/admin/articles/logic/"+data.id,{
                     _method : 'DELETE'
                 },function(data){
                     if(data.code==200){
