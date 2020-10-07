@@ -2,6 +2,9 @@ package cn.wmkfe.blog.controller.NewController;
 
 import cn.wmkfe.blog.dao.ArticleMapper;
 import cn.wmkfe.blog.model.Article;
+import cn.wmkfe.blog.model.Categories;
+import cn.wmkfe.blog.model.ExSearch;
+import cn.wmkfe.blog.model.Posts;
 import cn.wmkfe.blog.service.ArticleService;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
@@ -16,10 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author bSu
@@ -39,7 +39,7 @@ public class NewIndexController {
     public PageInfo<Article> index(@RequestParam(defaultValue = "1") int pageIndex) throws ParseException {
         /*List<Article> articles = articleMapper.listArchives();
         return articles;*/
-        PageInfo<Article> pageInfo = articleService.listArchives(pageIndex, 2);
+        PageInfo<Article> pageInfo = articleService.listArchives(pageIndex, 10);
         return pageInfo;
     }
 
@@ -53,6 +53,26 @@ public class NewIndexController {
     public Article getPost(@PathVariable String id){
         Article article = articleService.getArticle(id);
         return article;
+    }
+
+    @RequestMapping(value = {"/exSearch"})
+    public ExSearch exSearch(){
+        List<Article> list = articleMapper.listArchives();
+        List<Posts> posts=new ArrayList<>();
+        for(Article article : list){
+            Posts p=new Posts();
+            p.setTitle(article.getTitle());
+            p.setDate(String.valueOf(article.getCreateTime()));
+            p.setPath("/post.html?id="+article.getId());
+            p.setText(article.getIntroduction());
+            p.setCategories(new ArrayList<Categories>());
+            p.setTags(new ArrayList<String>());
+            posts.add(p);
+        }
+        ExSearch exSearch=new ExSearch();
+        exSearch.setPosts(posts);
+        exSearch.setPages(new ArrayList<String>());
+        return exSearch;
     }
 
 }
