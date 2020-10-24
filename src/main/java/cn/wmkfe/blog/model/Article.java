@@ -5,10 +5,11 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Article {
+public class Article implements Serializable {
     private String id;
     @NotEmpty(message = "文章标题不能为空")
     private String title;                  //标题

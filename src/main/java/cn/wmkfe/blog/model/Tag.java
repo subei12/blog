@@ -2,7 +2,9 @@ package cn.wmkfe.blog.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class Tag {
+import java.io.Serializable;
+
+public class Tag implements Serializable {
     private Integer id;
     @NotEmpty(message = "标签名称不能为空")
     private String tagName;

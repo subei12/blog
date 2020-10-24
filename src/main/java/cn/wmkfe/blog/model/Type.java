@@ -3,7 +3,9 @@ package cn.wmkfe.blog.model;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.validation.annotation.Validated;
 
-public class Type {
+import java.io.Serializable;
+
+public class Type implements Serializable {
     private Integer id;
     @NotEmpty(message = "分类名称不能为空")
     private String typeName;
