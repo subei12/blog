@@ -46,12 +46,12 @@ layui.use(['form','layer','layedit','laydate','upload'],function(){
                 return '分类必选其一';
             }
         },
-        imgVerify : function (value,item) {
+        /*imgVerify : function (value,item) {
             var imgSrc=$(item).attr('src');
             if (imgSrc == null) {
                 return '封面不能为空';
             }
-        }
+        }*/
     });
 
     form.on("submit(updateArticle)",function(data){

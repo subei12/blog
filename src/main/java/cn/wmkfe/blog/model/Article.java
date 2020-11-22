@@ -15,7 +15,7 @@ public class Article implements Serializable {
     private String title;                  //标题
     @NotEmpty(message = "文章简介不能为空")
     private String introduction;           //简介
-    @NotEmpty(message = "文章封面不能为空")
+    //@NotEmpty(message = "文章封面不能为空")
     private String firstPicture;           //封面
     @NotNull(message = "置顶必须选择其一")
     private Boolean putTop;                //置顶
